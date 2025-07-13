@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Blog</title>
+
+  <!-- Google Fonts: Sour Gummy -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Sour+Gummy:ital,wght@0,200;1,200&display=swap" rel="stylesheet" />
+
+  <!-- Link to CSS file -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <div class="container">
+
+    <!-- Sidebar -->
+    <nav id="sidebar">
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="blog.html">Blogs</a></li>
+        <li><a href="AboutMe.html">About Me</a></li>
+      </ul>
+    </nav>
+
+    <!-- Main content -->
+    <main>
+      <h1>My Tech Journey</h1>
+      <h3>
+        Hi, I’m Beneetta — a CS (AI) student documenting my journey from knowing almost nothing to building things that excite me. This blog is my accountability partner and digital diary.
+      </h3>
+
+      <!-- 📌 Tracker Section -->
+      <section class="tracker-box">
+        <h2>My Tracker</h2>
+
+        <!-- 🟠 Videos -->
+        <div class="tracker-category">
+          <h3>Videos</h3>
+          <div class="circle-container" id="videos-tracker"></div>
+        </div>
+
+        <!-- 🔵 Concepts -->
+        <div class="tracker-category">
+          <h3>Concepts</h3>
+          <div class="circle-container" id="concepts-tracker"></div>
+        </div>
+
+        <!-- 🟢 Projects -->
+        <div class="tracker-category">
+          <h3>Projects</h3>
+          <div class="circle-container" id="projects-tracker"></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const trackers = ['videos-tracker', 'concepts-tracker', 'projects-tracker'];
+    const CIRCLES_COUNT = 30;
+
+    // Save an array of booleans to localStorage
+    function saveState(trackerId, stateArray) {
+      localStorage.setItem(trackerId, JSON.stringify(stateArray));
+    }
+
+    // Load the saved state, or default all false if none saved yet
+    function loadState(trackerId) {
+      const data = localStorage.getItem(trackerId);
+      return data ? JSON.parse(data) : Array(CIRCLES_COUNT).fill(false);
+    }
+
+    // Create circles with saved fill state and toggle logic
+    function createCircles(containerId, count = CIRCLES_COUNT) {
+      const container = document.getElementById(containerId);
+      container.innerHTML = ''; // clear container
+      const state = loadState(containerId);
+
+      for (let i = 0; i < count; i++) {
+        const circle = document.createElement('div');
+        circle.classList.add('circle');
+        if (state[i]) circle.classList.add('filled');
+
+        circle.addEventListener('click', () => {
+          circle.classList.toggle('filled');
+          state[i] = circle.classList.contains('filled');
+          saveState(containerId, state);
+        });
+
+        container.appendChild(circle);
+      }
+    }
+
+    // Initialize all trackers
+    trackers.forEach(id => createCircles(id));
+  </script>
+
+</body>
+
+</html>
